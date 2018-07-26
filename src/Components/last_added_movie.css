@@ -1,0 +1,9 @@
+.movie-container{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.movie-img{
+    max-width: 300px;
+    height: auto;
+}
