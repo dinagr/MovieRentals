@@ -1,9 +1,10 @@
 
 import React, {Component} from 'react';
-import './user_login.css';
-import axios from 'axios';
+import '../styles/user_login.css';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { login } from "../actions/index";
 
-const api = 'http://localhost:52834/api/';
 
 class UserLogin extends Component {
     constructor(props) {
@@ -19,36 +20,21 @@ class UserLogin extends Component {
       }
     
     handleChange(event) {
-          switch(event.target.id){
-            case("userId"):
-                this.setState({userId: event.target.value});
-                break;
-            case("password"):
-                this.setState({password: event.target.value});
-                break;
-            default:
-                break;
-          }
-            
-        
+        this.setState({[event.target.id] : event.target.value});      
       }
     
     handleSubmit(event) {
-        axios.get(api + 'login/' + this.state.userId + '/' + this.state.password)
-        .then(response => {
-            this.setState({user: response.data});
-            console.log('login  ' + this.state.user);
-            this.props.OnLogin(this.state.user);
-            })
-        .catch(error => {
-            console.log('ERROR', error);
-         });
         event.preventDefault();
-      }
+        this.props.login(this.state.userId, this.state.password);
+    }
 
     render() {
         return (
             <div className="login-container">
+               
+                {/* <div className='alert alert-danger' role="alert">
+                    {this.props.errorMessage}
+                </div> */}
                 <h1 className="login-header">Login To Movies Rental</h1>
                 <form onSubmit={this.handleSubmit} >
                     <div className="form-group">
@@ -57,11 +43,16 @@ class UserLogin extends Component {
                     <div className="form-group">
                         <input type="password" value={this.state.password} onChange={this.handleChange} className="form-control" placeholder="Password" id="password"/>
                     </div>
-                    <button type="submit" className="btn btn-success">Submit</button>
+                    <button type="submit" className="btn btn-secondary">Submit</button>
                 </form>
             </div>
         );
     }
 }
 
-export default UserLogin;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ login }, dispatch);
+  }
+  
+  export default connect(null, mapDispatchToProps)(UserLogin);
+  

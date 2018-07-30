@@ -1,21 +1,35 @@
-import { FETCH_SEARCH } from "../actions/index";
+import { FETCH_SEARCH, UPDATE_RENTED_MOVIE } from "../actions/types";
 
-export default function(state=[] ,action) {
-    debugger;
-    console.log("action " + action);
+const initialState = {
+    user: {},
+    movies: []
+}
+
+export default function(state=initialState ,action) {
+
     switch(action.type)
     {
         case FETCH_SEARCH:
         {
-            console.log("fetch_search in reducer");
-            console.log("payload " + action.payload);
-            return [action.payload.data];
+            return {
+                ...state,
+                movies: action.payload,
+                errorMessage: ""
+            }
         }
+        
+        case UPDATE_RENTED_MOVIE:
+        {
+            return {
+                ...state,
+                movies: state.movies,
+                errorMessage: ""
+            }
+        }
+
             
         default:
-            break;
+            return state;
     }
 
-    return state;    
-    
 }

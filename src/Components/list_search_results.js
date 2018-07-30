@@ -1,35 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import  SearchResult  from './search_result';
-import { connect } from 'react-redux';
-//import {rentMovie} from '../actions/index';
-//import { bindActionCreators } from 'redux';
+import '../styles/list_search_result.css';
 
-const ListSearchResults = props => {
-
-    if (props.movies.length === 0){
-        return (<div>The are no matching movies to your search</div>);
+class ListSearchResults extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            movies: this.props.movies
+        };
+        
+        this.searchItems = '';
     }
-    //debugger;
-    const searchItems = props.movies.map((result) => {
-        return <SearchResult key={result.MovieId} result={result}/>
-    });
 
-    return (
-        <ul className="col-md-12 list-group">
-            {searchItems}
-        </ul>
-    );
-    
-} 
-
-function mapStateToProps({movies}) {
-    return {
-      movies
+    render() {
+        var numOfMovies = 0;
+        if (this.props.movies && this.props.movies.movies) {
+            numOfMovies = this.props.movies.movies.length;
+            this.searchItems = this.props.movies.movies.map((result) => {
+                return <SearchResult key={result.MovieId} 
+                                    result={result} 
+                                    userId={this.props.userId} 
+                                    numOfMovies = {numOfMovies} 
+                                    hasRentedMovies = {this.props.hasRentedMovies}
+                                    movieName = {this.props.movieName} 
+                                    movieId = {this.props.movieId} />
+            });
+        }
+        else {
+            this.searchItems = <div>The are no matching movies to your search</div>;
+        }
+        return (
+            <div className={numOfMovies > 1  ? 'card-columns' : 'card-columns one-card-center'}>
+                {this.searchItems}
+            </div>
+        );
     }
 }
 
-// function mapDispatchToProps(dispatch){
-//     return bindActionCreators({doSearch: doSearch}, dispatch)
-// }
+  
 
-export default connect(mapStateToProps)(ListSearchResults);
+  
+export default ListSearchResults;
+

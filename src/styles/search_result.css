@@ -1,0 +1,7 @@
+.card:hover {
+    background-color: #F0F0F0;
+}
+
+.one-card-minimize {
+    width: 75% !important;
+}
